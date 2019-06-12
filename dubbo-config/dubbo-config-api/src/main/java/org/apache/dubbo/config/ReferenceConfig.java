@@ -66,18 +66,18 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
     private static final long serialVersionUID = -5864351140409987595L;
 
     /**
-     * The {@link Protocol} implementation with adaptive functionality,it will be different in different scenarios.
-     * A particular {@link Protocol} implementation is determined by the protocol attribute in the {@link URL}.
-     * For example:
+     * 具有自适应功能的{@link Protocol}实现，在不同场景下会有所不同。
+     *特定的{@link Protocol}实现由{@link URL}中的协议属性决定。
+     * 例如：
      *
-     * <li>when the url is registry://224.5.6.7:1234/org.apache.dubbo.registry.RegistryService?application=dubbo-sample,
-     * then the protocol is <b>RegistryProtocol</b></li>
+     * <li>当url是：registry//224.5.6.7：1234 / org.apache.dubbo.registry.RegistryService？application = dubbo-sample，
+     *然后协议是<b> RegistryProtocol </ b> </ li>
      *
-     * <li>when the url is dubbo://224.5.6.7:1234/org.apache.dubbo.config.api.DemoService?application=dubbo-sample, then
-     * the protocol is <b>DubboProtocol</b></li>
+     * <li>当网址为 :dubbo//224.5.6.7：1234 / org.apache.dubbo.config.api.DemoService？application = dubbo-sample，则
+     *协议是<b> DubboProtocol </ b> </ li>
      * <p>
-     * Actually，when the {@link ExtensionLoader} init the {@link Protocol} instants,it will automatically wraps two
-     * layers, and eventually will get a <b>ProtocolFilterWrapper</b> or <b>ProtocolListenerWrapper</b>
+     * 实际上，当{@link ExtensionLoader}初始化{@link Protocol}时，它会自动包装两个
+     *图层，最终将获得<b> ProtocolFilterWrapper </ b>或<b> ProtocolListenerWrapper </ b>
      */
     private static final Protocol refprotocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
 
@@ -332,7 +332,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
                 logger.info("Using injvm service " + interfaceClass.getName());
             }
         } else {
-            if (url != null && url.length() > 0) { // user specified URL, could be peer-to-peer address, or register center's address.
+            if (url != null && url.length() > 0) { // 用户指定的URL，可以是对等地址，也可以是注册中心的地址s.
                 String[] us = Constants.SEMICOLON_SPLIT_PATTERN.split(url);
                 if (us != null && us.length > 0) {
                     for (String u : us) {

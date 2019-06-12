@@ -74,18 +74,19 @@ public class AdaptiveClassCodeGenerator {
     }
     
     /**
-     * test if given type has at least one method annotated with <code>SPI</code>
+     * 测试给定类型是否至少有一个用<code> SPI </ code>注释的方法
      */
     private boolean hasAdaptiveMethod() {
         return Arrays.stream(type.getMethods()).anyMatch(m -> m.isAnnotationPresent(Adaptive.class));
     }
     
     /**
-     * generate and return class code
+     * 生成并返回类代码
      */
     public String generate() {
-        // no need to generate adaptive class since there's no adaptive method found.
+        // 不需要生成自适应类，因为没有找到自适应方法。
         if (!hasAdaptiveMethod()) {
+            // 若无 Adaptive 注解，则抛出异常
             throw new IllegalStateException("No adaptive method exist on extension " + type.getName() + ", refuse to create the adaptive class!");
         }
 
@@ -93,8 +94,10 @@ public class AdaptiveClassCodeGenerator {
         code.append(generatePackageInfo());
         code.append(generateImports());
         code.append(generateClassDeclaration());
-        
+
+        // 通过反射获取所有的方法
         Method[] methods = type.getMethods();
+        // 遍历方法列表
         for (Method method : methods) {
             code.append(generateMethod(method));
         }
@@ -128,14 +131,14 @@ public class AdaptiveClassCodeGenerator {
     }
     
     /**
-     * generate method not annotated with Adaptive with throwing unsupported exception 
+     * 生成没有使用Adaptive注释的方法，抛出不支持的异常
      */
     private String generateUnsupported(Method method) {
         return String.format(CODE_UNSUPPORTED, method, type.getName());
     }
     
     /**
-     * get index of parameter with type URL
+     * 获取类型为URL的参数索引
      */
     private int getUrlTypeIndex(Method method) {            
         int urlTypeIndex = -1;
@@ -150,18 +153,6 @@ public class AdaptiveClassCodeGenerator {
     }
     
     /**
-     * generate method declaration
-     */
-    private String generateMethod(Method method) {
-        String methodReturnType = method.getReturnType().getCanonicalName();
-        String methodName = method.getName();
-        String methodContent = generateMethodContent(method);
-        String methodArgs = generateMethodArguments(method);
-        String methodThrows = generateMethodThrows(method);
-        return String.format(CODE_METHOD_DECLARATION, methodReturnType, methodName, methodArgs, methodThrows, methodContent);
-    }
-
-    /**
      * generate method arguments
      */
     private String generateMethodArguments(Method method) {
@@ -170,7 +161,22 @@ public class AdaptiveClassCodeGenerator {
                         .mapToObj(i -> String.format(CODE_METHOD_ARGUMENT, pts[i].getCanonicalName(), i))
                         .collect(Collectors.joining(", "));
     }
-    
+
+    /**
+     * 生成方法声明
+     */
+    private String generateMethod(Method method) {
+        String methodReturnType = method.getReturnType().getCanonicalName();
+        String methodName = method.getName();
+        // 方法内容
+        String methodContent = generateMethodContent(method);
+        // 方法参数
+        String methodArgs = generateMethodArguments(method);
+        // 方法异常
+        String methodThrows = generateMethodThrows(method);
+        return String.format(CODE_METHOD_DECLARATION, methodReturnType, methodName, methodArgs, methodThrows, methodContent);
+    }
+
     /**
      * generate method throws 
      */
@@ -185,29 +191,30 @@ public class AdaptiveClassCodeGenerator {
     }
     
     /**
-     * generate method URL argument null check 
+     * generate方法URL参数null check
      */
     private String generateUrlNullCheck(int index) {
         return String.format(CODE_URL_NULL_CHECK, index, URL.class.getName(), index);
     }
     
     /**
-     * generate method content
+     * 生成方法内容
      */
     private String generateMethodContent(Method method) {
         Adaptive adaptiveAnnotation = method.getAnnotation(Adaptive.class);
         StringBuilder code = new StringBuilder(512);
         if (adaptiveAnnotation == null) {
+            // 如果方法上无 Adaptive 注解，则生成 throw new UnsupportedOperationException(...) 代码
             return generateUnsupported(method);
         } else {
             int urlTypeIndex = getUrlTypeIndex(method);
             
-            // found parameter in URL type
+            // 在URL类型中找到参数
             if (urlTypeIndex != -1) {
-                // Null Point check
+                // 空点检查
                 code.append(generateUrlNullCheck(urlTypeIndex));
             } else {
-                // did not find parameter in URL type
+                // 没有在URL类型中找到参数
                 code.append(generateUrlAssignmentIndirectly(method));
             }
 

@@ -623,7 +623,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
         String hostToBind = getValueFromConfig(protocolConfig, Constants.DUBBO_IP_TO_BIND);
 
-        // if bind ip is not found in environment, keep looking up
+        // 如果在环境中找不到绑定ip，请继续查找
         if (StringUtils.isEmpty(hostToBind)) {
             hostToBind = protocolConfig.getHost();
             if (provider != null && StringUtils.isEmpty(hostToBind)) {

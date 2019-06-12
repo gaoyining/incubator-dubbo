@@ -25,7 +25,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Provide helpful information for {@link ExtensionLoader} to inject dependency extension instance.
+ * 为{@link ExtensionLoader}提供有用信息以注入依赖项扩展实例。
  *
  * @see ExtensionLoader
  * @see URL
@@ -35,11 +35,11 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Adaptive {
     /**
-     * Decide which target extension to be injected. The name of the target extension is decided by the parameter passed
-     * in the URL, and the parameter names are given by this method.
+     * 确定要注入的目标扩展名。目标扩展名由传递的参数决定
+     *在URL中，参数名称由此方法给出。
      * <p>
-     * If the specified parameters are not found from {@link URL}, then the default extension will be used for
-     * dependency injection (specified in its interface's {@link SPI}).
+     * 如果未在{@link URL}中找到指定的参数，则将使用默认扩展名
+     *依赖注入（在其接口的{@link SPI}中指定）。
      * <p>
      * For example, given <code>String[] {"key1", "key2"}</code>:
      * <ol>
@@ -48,10 +48,10 @@ public @interface Adaptive {
      * <li>use default extension if 'key2' doesn't exist either</li>
      * <li>otherwise, throw {@link IllegalStateException}</li>
      * </ol>
-     * If the parameter names are empty, then a default parameter name is generated from interface's
-     * class name with the rule: divide classname from capital char into several parts, and separate the parts with
-     * dot '.', for example, for {@code org.apache.dubbo.xxx.YyyInvokerWrapper}, the generated name is
-     * <code>String[] {"yyy.invoker.wrapper"}</code>.
+     * 如果参数名称为空，则从接口生成默认参数名称
+     *带有规则的类名：将classname从capital char分成几个部分，并将部分分开
+     * dot'。'，例如，对于{@code org.apache.dubbo.xxx.YyyInvokerWrapper}，生成的名称是
+     * <code> String [] {“yyy.invoker.wrapper”} </ code>。
      *
      * @return parameter names in URL
      */

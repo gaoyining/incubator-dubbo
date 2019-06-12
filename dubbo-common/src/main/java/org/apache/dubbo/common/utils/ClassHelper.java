@@ -86,7 +86,7 @@ public class ClassHelper {
     }
 
     /**
-     * get class loader
+     * 获取类加载器
      *
      * @param clazz
      * @return class loader
@@ -96,17 +96,17 @@ public class ClassHelper {
         try {
             cl = Thread.currentThread().getContextClassLoader();
         } catch (Throwable ex) {
-            // Cannot access thread context ClassLoader - falling back to system class loader...
+            // 无法访问线程上下文ClassLoader  - 回退到系统类加载器...
         }
         if (cl == null) {
-            // No thread context class loader -> use class loader of this class.
+            // 没有线程上下文类加载器 - >使用此类的类加载器。
             cl = clazz.getClassLoader();
             if (cl == null) {
-                // getClassLoader() returning null indicates the bootstrap ClassLoader
+                // getClassLoader（）返回null表示引导程序ClassLoader
                 try {
                     cl = ClassLoader.getSystemClassLoader();
                 } catch (Throwable ex) {
-                    // Cannot access system ClassLoader - oh well, maybe the caller can live with null...
+                    // 无法访问系统ClassLoader  - 哦，也许调用者可以使用null ...
                 }
             }
         }
